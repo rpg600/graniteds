@@ -25,7 +25,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.Date;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import org.granite.clustering.DistributedData;
 import org.granite.config.GraniteConfig;

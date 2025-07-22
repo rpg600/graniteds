@@ -21,7 +21,7 @@
  */
 package org.granite.config;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 public interface GraniteConfigReloadListener {
 

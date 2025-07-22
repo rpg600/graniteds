@@ -24,8 +24,8 @@ package org.granite.config.flex;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
 
 import org.granite.config.GraniteConfig;
 import org.granite.config.ServletGraniteConfig;

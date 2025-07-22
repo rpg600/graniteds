@@ -28,7 +28,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import flex.messaging.messages.AsyncMessage;
 import flex.messaging.messages.CommandMessage;

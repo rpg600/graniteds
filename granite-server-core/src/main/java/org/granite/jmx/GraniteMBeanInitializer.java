@@ -22,7 +22,7 @@
 package org.granite.jmx;
 
 import javax.management.ObjectName;
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.granite.config.ServletGraniteConfig;
 import org.granite.config.flex.ServletServicesConfig;

@@ -21,7 +21,7 @@
  */
 package org.granite.clustering;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import org.granite.context.GraniteContext;
 import org.granite.logging.Logger;

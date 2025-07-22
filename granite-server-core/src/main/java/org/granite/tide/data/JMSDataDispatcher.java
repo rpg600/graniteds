@@ -34,7 +34,7 @@ import javax.jms.Topic;
 import javax.jms.TopicConnectionFactory;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import org.granite.context.GraniteContext;
 import org.granite.gravity.adapters.JMSClient;

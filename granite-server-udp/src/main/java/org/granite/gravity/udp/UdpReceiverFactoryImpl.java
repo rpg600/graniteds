@@ -36,7 +36,7 @@ package org.granite.gravity.udp;
 
 import java.net.InetSocketAddress;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.granite.gravity.AbstractChannel;
 import org.granite.gravity.GravityConfig;

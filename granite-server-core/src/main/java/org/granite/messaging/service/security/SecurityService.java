@@ -21,7 +21,7 @@
  */
 package org.granite.messaging.service.security;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.Serializable;
 import java.security.Principal;

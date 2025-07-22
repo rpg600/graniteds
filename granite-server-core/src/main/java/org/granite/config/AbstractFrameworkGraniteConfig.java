@@ -24,7 +24,7 @@ package org.granite.config;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.granite.config.api.Configuration;
 import org.granite.config.api.internal.ConfigurationImpl;
