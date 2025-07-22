@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.github.rpg600</groupId>
+    <artifactId>granite-server-udp</artifactId>
+    <version>3.1.1.GA-patched</version>
+    <name>null</name>
+    <description>null</description>
+    <url>http://www.graniteds.org</url>
+    <licenses>
+        <license>
+            <name>GNU LIBRARY GENERAL PUBLIC LICENSE, Version 2.1, February 1999</name>
+            <url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>fwolff</id>
+            <name>Franck Wolff</name>
+        </developer>
+        <developer>
+            <id>wdrai</id>
+            <name>William Drai</name>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git@github.com:rpg600/granite-server-udp.git</connection>
+        <developerConnection>scm:git@github.com:rpg600/granite-server-udp.git</developerConnection>
+        <url>scm:git@github.com:rpg600/granite-server-udp.git</url>
+    </scm>
+</project>
