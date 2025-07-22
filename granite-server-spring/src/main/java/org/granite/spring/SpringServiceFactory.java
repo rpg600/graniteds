@@ -21,7 +21,7 @@
  */
 package org.granite.spring;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.granite.config.flex.Destination;
 import org.granite.config.flex.ServicesConfig;

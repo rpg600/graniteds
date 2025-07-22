@@ -21,8 +21,8 @@
  */
 package org.granite.gravity.servlet3;
 
-import javax.servlet.AsyncEvent;
-import javax.servlet.AsyncListener;
+import jakarta.servlet.AsyncEvent;
+import jakarta.servlet.AsyncListener;
 import java.io.IOException;
 
 /**

@@ -22,7 +22,7 @@
 package org.granite.test.tide.cdi.service;
 
 import javax.enterprise.inject.Produces;
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.granite.context.GraniteContext;
 import org.granite.messaging.webapp.HttpGraniteContext;

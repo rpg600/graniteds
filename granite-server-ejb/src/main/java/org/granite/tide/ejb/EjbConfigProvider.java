@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import javax.naming.InitialContext;
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.granite.config.ConfigProvider;
 import org.granite.gravity.Gravity;

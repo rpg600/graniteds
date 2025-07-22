@@ -27,7 +27,7 @@ import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Inject;
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.granite.context.GraniteContext;
 import org.granite.gravity.Gravity;

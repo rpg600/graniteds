@@ -25,10 +25,10 @@ import flex.messaging.messages.AsyncMessage;
 import org.granite.gravity.Gravity;
 import org.granite.gravity.GravityManager;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.annotation.WebListener;
 
 /**
  * Created by william on 30/09/13.

@@ -29,8 +29,8 @@ import org.granite.gravity.GravityInternal;
 import org.granite.logging.Logger;
 import org.jboss.servlet.http.HttpEvent;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**

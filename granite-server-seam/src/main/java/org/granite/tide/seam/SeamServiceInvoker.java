@@ -21,7 +21,7 @@
  */
 package org.granite.tide.seam;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import org.granite.config.flex.Destination;
 import org.granite.context.GraniteContext;

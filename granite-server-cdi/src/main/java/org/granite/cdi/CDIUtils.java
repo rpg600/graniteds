@@ -24,7 +24,7 @@ package org.granite.cdi;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 
 public class CDIUtils {

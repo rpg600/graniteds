@@ -25,7 +25,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 
 import javax.inject.Inject;
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.granite.context.GraniteContext;
 import org.granite.context.SimpleGraniteContext;

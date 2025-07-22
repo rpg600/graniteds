@@ -21,7 +21,7 @@
  */
 package org.granite.test.tide.seam;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.granite.test.tide.TestDataUpdatePostprocessor.WrappedUpdate;
 import org.granite.test.tide.data.Person;

@@ -25,7 +25,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.websocket.WebSocketHandler;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 
 public class EmbeddedJettyWebSocketServer extends Server {

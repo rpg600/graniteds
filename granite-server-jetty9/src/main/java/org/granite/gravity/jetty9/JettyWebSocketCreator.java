@@ -35,8 +35,8 @@ import org.granite.logging.Logger;
 import org.granite.messaging.webapp.ServletGraniteContext;
 import org.granite.util.ContentType;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpSession;
 
 public class JettyWebSocketCreator implements WebSocketCreator {
 	

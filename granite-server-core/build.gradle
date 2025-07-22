@@ -4,7 +4,7 @@
 description = 'GraniteDS Core server library'
 
 dependencies {
-	compile 'javax.servlet:javax.servlet-api:3.0.1'				// Should use 2.5 but 3.0 required by ServletGraniteContext.BasicRequest
+	compile 'jakarta.servlet:jakarta.servlet-api:5.0.0'				// Should use 2.5 but 3.0 required by ServletGraniteContext.BasicRequest
 
 	compile 'org.javassist:javassist:3.18.2-GA'
 	compile 'log4j:log4j:1.2.17'

@@ -30,8 +30,8 @@ import org.granite.messaging.service.security.SecurityServiceException;
 import org.granite.messaging.webapp.HttpGraniteContext;
 import org.granite.messaging.webapp.ServletGraniteContext;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

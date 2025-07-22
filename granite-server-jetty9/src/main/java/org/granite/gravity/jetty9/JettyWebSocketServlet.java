@@ -27,8 +27,8 @@ import org.granite.gravity.Gravity;
 import org.granite.gravity.GravityManager;
 import org.granite.gravity.GravityServletUtil;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
 
 
 public class JettyWebSocketServlet extends WebSocketServlet {

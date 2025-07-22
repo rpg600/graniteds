@@ -26,9 +26,9 @@ import java.security.Principal;
 import java.util.Map;
 
 import javax.security.auth.login.LoginException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import org.granite.context.GraniteContext;
 import org.granite.messaging.webapp.HttpGraniteContext;

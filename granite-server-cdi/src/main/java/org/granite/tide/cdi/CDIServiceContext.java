@@ -47,7 +47,7 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Inject;
 import javax.persistence.Entity;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import org.granite.config.ConvertersConfig;
 import org.granite.config.GraniteConfig;

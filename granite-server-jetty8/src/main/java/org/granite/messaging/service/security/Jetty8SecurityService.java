@@ -25,8 +25,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.security.Principal;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 import org.eclipse.jetty.server.Authentication;
 import org.eclipse.jetty.server.Request;

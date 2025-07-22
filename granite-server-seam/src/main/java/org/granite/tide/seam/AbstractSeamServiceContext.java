@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Entity;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import org.granite.config.ConvertersConfig;
 import org.granite.config.GraniteConfig;

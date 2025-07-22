@@ -23,7 +23,7 @@ package org.granite.gravity.websocket;
 
 import org.granite.util.ContentType;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 /**
  * Created by william on 13/02/14.

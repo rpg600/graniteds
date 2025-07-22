@@ -29,7 +29,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.granite.config.GraniteConfig;
 import org.granite.config.ServletGraniteConfig;
