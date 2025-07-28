@@ -198,7 +198,24 @@ public class ServletGraniteContext extends GraniteContext {
     private class BasicRequest implements HttpServletRequest {
     	
     	private Map<String, Object> attributes = new HashMap<String, Object>();
-    	
+
+    	@Override
+      public <T extends jakarta.servlet.http.HttpUpgradeHandler> T upgrade(Class<T> handlerClass)
+              throws IOException, ServletException {
+          // Stub implementation, return null or throw if unsupported
+          return null;
+      }
+
+      @Override
+      public String changeSessionId() {
+          return getRequest().changeSessionId();
+      }
+
+      @Override
+      public long getContentLengthLong() {
+          return getRequest().getContentLengthLong();
+      }
+
     	public ServletContext getServletContext() {
     		return servletContext;
     	}
@@ -462,6 +479,11 @@ public class ServletGraniteContext extends GraniteContext {
     }
     
     private class BasicResponse implements HttpServletResponse {
+
+    @Override
+    public void setContentLengthLong(long len) {
+        // Stub implementation
+    }
 
 		public void flushBuffer() throws IOException {
 		}

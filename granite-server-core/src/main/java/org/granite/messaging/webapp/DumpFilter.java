@@ -37,6 +37,8 @@ import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+import jakarta.servlet.ReadListener;
+import jakarta.servlet.WriteListener;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpServletResponse;
@@ -154,6 +156,22 @@ public class DumpFilter implements Filter {
                 public int read() throws IOException {
                     return bais.read();
                 }
+
+                @Override
+                public boolean isFinished() {
+                    return bais.available() == 0;
+                }
+
+                @Override
+                public boolean isReady() {
+                    return true;
+                }
+
+                @Override
+                public void setReadListener(ReadListener readListener) {
+                    // Not implemented
+                    throw new UnsupportedOperationException();
+                }
             };
         }
 
@@ -175,13 +193,24 @@ public class DumpFilter implements Filter {
         @Override
         public ServletOutputStream getOutputStream() throws IOException {
 
-            return new ServletOutputStream() {
-                @Override
-                public void write(int b) throws IOException {
-                    baos.write(b);
-                    out.write(b);
-                }
-            };
+           return new ServletOutputStream() {
+               @Override
+               public void write(int b) throws IOException {
+                   baos.write(b);
+                   out.write(b);
+               }
+
+               @Override
+               public boolean isReady() {
+                   return true;
+               }
+
+               @Override
+               public void setWriteListener(WriteListener writeListener) {
+                   // Not implemented
+                   throw new UnsupportedOperationException();
+               }
+           };
         }
 
         public byte[] getBytes() {

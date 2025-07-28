@@ -54,7 +54,23 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	public MockHttpServletRequest(HttpSession session) {
 		this.session = session;
 	}
-	
+
+	@Override
+  public <T extends jakarta.servlet.http.HttpUpgradeHandler> T upgrade(Class<T> handlerClass) throws IOException, ServletException {
+      throw new UnsupportedOperationException("MockHttpServletRequest does not support upgrade()");
+  }
+
+	@Override
+  public long getContentLengthLong() {
+      return -1; // or a mock length
+  }
+
+  @Override
+  public String changeSessionId() {
+      // For testing purposes, return a dummy session ID
+      return "mockSessionId";
+  }
+
 	@Override
 	public AsyncContext getAsyncContext() {
 		return null;

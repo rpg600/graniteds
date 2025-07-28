@@ -36,6 +36,8 @@ import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+import jakarta.servlet.ReadListener;
+import jakarta.servlet.WriteListener;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpServletResponse;
@@ -108,6 +110,26 @@ public class JMFDumpFilter implements Filter {
             final InputStream is = getRequest().getInputStream();
 
             return new ServletInputStream() {
+
+              @Override
+              public boolean isFinished() {
+                  try {
+                      return is.available() == 0;
+                  } catch (IOException e) {
+                      // Handle it gracefully or log and return a default
+                      return true; // assuming you want to treat exception as "finished"
+                  }
+              }
+
+              @Override
+              public boolean isReady() {
+                  return true;
+              }
+
+              @Override
+              public void setReadListener(ReadListener readListener) {
+                  throw new UnsupportedOperationException("Async read not supported");
+              }
                 
             	@Override
                 public int read() throws IOException {
@@ -117,17 +139,17 @@ public class JMFDumpFilter implements Filter {
                     return b;
                 }
 
-				@Override
-				public int available() throws IOException {
-					return is.available();
-				}
+                @Override
+                public int available() throws IOException {
+                  return is.available();
+                }
 
-				@Override
-				public void close() throws IOException {
-					is.close();
-					
-					dumpBytes("request", baos.toByteArray());
-				}
+                @Override
+                public void close() throws IOException {
+                  is.close();
+
+                  dumpBytes("request", baos.toByteArray());
+                }
             };
         }
     }
@@ -147,17 +169,27 @@ public class JMFDumpFilter implements Filter {
         	
             return new ServletOutputStream() {
                 @Override
+                public boolean isReady() {
+                    return true;
+                }
+
+                @Override
+                public void setWriteListener(WriteListener writeListener) {
+                    throw new UnsupportedOperationException("Async write not supported");
+                }
+
+                @Override
                 public void write(int b) throws IOException {
                     baos.write(b);
                     os.write(b);
                 }
 
-				@Override
-				public void close() throws IOException {
-					os.close();
-					
-					dumpBytes("response", baos.toByteArray());
-				}
+                @Override
+                public void close() throws IOException {
+                  os.close();
+
+                  dumpBytes("response", baos.toByteArray());
+                }
             };
         }
     }

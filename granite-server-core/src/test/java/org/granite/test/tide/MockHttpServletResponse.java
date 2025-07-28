@@ -32,6 +32,11 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class MockHttpServletResponse implements HttpServletResponse {
 
+  @Override
+  public void setContentLengthLong(long len) {
+      // No-op for mock
+  }
+
 	@Override
 	public void flushBuffer() throws IOException {
 		// TODO Auto-generated method stub
