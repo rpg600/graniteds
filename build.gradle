@@ -3,24 +3,21 @@ import org.apache.tools.ant.filters.ReplaceTokens
 buildscript {
     repositories {
         mavenCentral()
-		maven {
-			name 'Bintray Asciidoctor repo'
-			url 'http://dl.bintray.com/content/aalmiray/asciidoctor'
-		}
-		maven {
-			name 'Bintray JCenter'
-			url 'http://jcenter.bintray.com'
-		}
+        maven {
+            name = 'Bintray Plugins'
+            url = 'https://plugins.gradle.org/m2'
+        }
+        maven {
+          name 'Groovy jfrog'
+          url 'https://groovy.jfrog.io/artifactory/libs-release'
+        }
     }
-	
     dependencies {
-		classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.10.0'
-		classpath 'net.saliman:gradle-cobertura-plugin:1.1.2'
-        classpath group: 'org.gradlefx', name: 'gradlefx', version: '0.8.1'
-		classpath 'org.asciidoctor:asciidoctor-gradle-plugin:0.5.0'
-		classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.3'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.4'
     }
 }
+
+apply plugin: 'com.jfrog.bintray'
 
 group = 'org.graniteds'
 version = granitedsVersion
@@ -28,120 +25,47 @@ version = granitedsVersion
 ext.jetty8Version = '8.1.15.v20140411'
 ext.jetty9Version = '9.1.2.v20140210'
 
-// https://gist.github.com/JonasGroeger/7620911
 def timestamp = new Date().format('yyyyMMddHHmmss')
 try {
-    // Try to get timestamp of last git commit
     def gitFolder = "$projectDir/.git/"
-    def takeFromHash = 12
-    def head = new File(gitFolder + 'HEAD').text.split(':') // .git/HEAD
-    def isCommit = head.length == 1 // e5a7c79edabbf7dd39888442df081b1c9d8e88fd
-    def refHead = new File(gitFolder + (isCommit ? 'HEAD' : head[1].trim())) // .git/refs/heads/master
+    def head = new File(gitFolder + 'HEAD').text.split(':')
+    def isCommit = head.length == 1
+    def refHead = new File(gitFolder + (isCommit ? 'HEAD' : head[1].trim()))
     timestamp = new Date(refHead.lastModified()).format('yyyyMMddHHmmss')
-}
-catch (Exception e) {
-    // Ignore
-}
+} catch (Exception ignored) {}
 
-if (granitedsVersion.indexOf('-SNAPSHOT') > 0)
-    ext.pluginVersion = granitedsVersion.replace('-SNAPSHOT', '.v' + timestamp)
-else
-    ext.pluginVersion = granitedsVersion.substring(0, granitedsVersion.lastIndexOf('.')) + '.v' + timestamp
+ext.pluginVersion = granitedsVersion.contains('-SNAPSHOT') ?
+        granitedsVersion.replace('-SNAPSHOT', ".v$timestamp") :
+        granitedsVersion.replaceAll(/(\d+\.\d+)\..*/, "\$1.v$timestamp")
 
 ext.javadocLinks = [
-	"http://docs.oracle.com/javase/7/docs/api/",
-	"http://docs.oracle.com/javaee/7/api/",
+    "http://docs.oracle.com/javase/7/docs/api/",
+    "http://docs.oracle.com/javaee/7/api/"
 ]
 
-// Main tasks for eclipse
-task buildServer {
-	dependsOn ':granite-server:buildDependents', ':granite-server:buildNeeded'
-}
-
-task buildJavaClient {
-	dependsOn ':granite-client-java-advanced:buildDependents', ':granite-client-java-advanced:buildNeeded',
-		':granite-client-javafx:buildDependents', ':granite-client-javafx:buildNeeded',
-		':granite-client-android:buildDependents', ':granite-client-android:buildNeeded'
-}
-
-task buildFlexClient {
-	dependsOn ':granite-client-flex:build', 'granite-client-flex-advanced:build', 'granite-client-flex45-advanced:build'
-}
-
-task build {
-	dependsOn 'buildServer', 'buildJavaClient', 'buildFlexClient'
-}
-
-
+// Set up repository for all subprojects
 configure(subprojects) {
-	
-	repositories {
-		mavenCentral()
-		maven {
-			name 'JBoss Nexus'
-			url 'https://repository.jboss.org/nexus/content/groups/public'
-		}
-        mavenLocal()
-	}
+    repositories {
+        mavenCentral()
+    }
 }
 
-// Add Java plugin for all non-Flex subprojects
-configure(subprojects.findAll { it.name.startsWith('granite') && !it.name.startsWith('granite-client-flex') && it.name != 'granite-server' && it.name != 'granite-generator-share' }) { subproject ->
+// Apply Java plugin and config
+configure(subprojects.findAll { it.name in ['granite-common', 'granite-amf', 'granite-jmf', 'granite-jmf-java8', 'granite-server-core', 'granite-server-servlet3'] }) { subproject ->
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
 
-	apply plugin: 'java'
-	apply plugin: 'eclipse'
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
 
-    compileJava {
-        sourceCompatibility=1.6
-        targetCompatibility=1.6
-    }
-    if (subproject.name.startsWith('granite-server')) {
-        compileTestJava {
-            sourceCompatibility=1.6
-            targetCompatibility=1.6
-        }
-    }
-    else {
-        compileTestJava {
-            sourceCompatibility=1.7
-            targetCompatibility=1.7
-        }
+    dependencies {
+        testCompile 'junit:junit:4.11'
     }
 
-	[compileJava, compileTestJava]*.options*.compilerArgs = [
-		"-Xlint:varargs",
-		"-Xlint:cast",
-		"-Xlint:classfile",
-		"-Xlint:dep-ann",
-		"-Xlint:divzero",
-		"-Xlint:empty",
-		"-Xlint:finally",
-		"-Xlint:overrides",
-		"-Xlint:path",
-		"-Xlint:processing",
-		"-Xlint:static",
-		"-Xlint:try",
-		"-Xlint:serial",
-		"-Xlint:-options",
-		"-Xlint:-fallthrough",
-		"-Xlint:-rawtypes",
-		"-Xlint:-deprecation",
-		"-Xlint:-unchecked"
-	]
-	
-	configurations {
-		create('javadoc')
-	}
-	
-	task sourcesJar(type: Jar, dependsOn: 'classes') {
-		classifier = 'sources'
-		from sourceSets.main.allSource
-	}
-	
-	task javadocJar(type: Jar, dependsOn: 'javadoc') {
-		classifier = 'javadoc'
-		from javadoc.destinationDir
-	}
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
 
     jar {
         metaInf {
@@ -149,260 +73,22 @@ configure(subprojects.findAll { it.name.startsWith('granite') && !it.name.starts
         }
     }
 
-	artifacts {
-		archives sourcesJar
-		archives javadocJar
-	}
-	
-	dependencies {
-		javadoc 'log4j:log4j:1.2.17'
-		
-		testCompile 'junit:junit:4.11'
-	}
+    artifacts {
+        archives sourcesJar
+    }
 
     test {
         workingDir = subproject.rootDir
-        ignoreFailures = true       // Don't break the build on test failures so bamboo can get the test results
+        ignoreFailures = true
     }
-
-	javadoc {
-		title 'GraniteDS API Documentation'
-		
-		classpath.add(configurations.javadoc)
-		
-		configure(options) {
-			version = true
-			author = true
-			use = true
-			windowTitle = 'GraniteDS API Documentation'
-			docTitle = 'GraniteDS API Documentation - ' + granitedsVersion
-			links = rootProject.ext.javadocLinks
-		}
-	}	
 }
 
-// Add GradleFX plugin for all Flex subprojects
-configure(subprojects.findAll { it.name.startsWith('granite-client-flex') }) { subproject ->
-	
-	apply plugin: 'gradlefx'
-	apply plugin: 'flashbuilder'
-	
-	output = 'libs/' + subproject.name + '-' + granitedsVersion
-}
-
-// Add license plugin for all subprojects
-// Use a modified version of the license plugin to be compatible with GradleFX
-configure(subprojects.findAll { it.name != 'granite-server' && it.name != 'granite-generator-share' && it.name != 'reference-docs' }) { subproject ->
-
-	apply plugin: ExtLicensePlugin
-	
-	license {
-		header rootProject.file('HEADER-' + subproject.moduleLicense + '.txt')
-		strictCheck true
-		ext.year = Calendar.getInstance().get(Calendar.YEAR)
-		mapping('as', 'SLASHSTAR_STYLE')
-	}
-}
-
-import nl.javadude.gradle.plugins.license.License
-import nl.javadude.gradle.plugins.license.LicensePlugin
-
-
-class ExtLicensePlugin extends LicensePlugin {
-	
-	private static Logger logger = Logging.getLogger(ExtLicensePlugin);
-	
-	void apply(Project project) {
-        this.project = project
-
-        extension = createExtension()
-        configureExtensionRule()
-		
-        project.plugins.withType(JavaBasePlugin) {
-            extension.sourceSets.all { SourceSet sourceSet ->
-                def sourceSetTaskName = sourceSet.getTaskName(taskBaseName, null)
-                logger.info("Adding license tasks for sourceSet ${sourceSetTaskName}");
-
-                License checkTask = project.tasks.create(sourceSetTaskName, License)
-                checkTask.check = true
-                configureForSourceSet(sourceSet, checkTask)
-
-                // Add license checking into check lifecycle, since its a type of code quality plugin
-                project.tasks[JavaBasePlugin.CHECK_TASK_NAME].dependsOn checkTask
-
-                // Add independent license task, which will perform format
-                def sourceSetFormatTaskName = sourceSet.getTaskName(taskBaseName + 'Format', null)
-                License formatTask = project.tasks.create(sourceSetFormatTaskName, License)
-                formatTask.check = false
-                configureForSourceSet(sourceSet, formatTask)
-            }
-        }
-		
-		project.plugins.withType(org.gradlefx.plugins.GradleFxPlugin) {
-			logger.info("Adding license tasks for Flex");
-			
-			License checkTask = project.tasks.create('licenseFlex', License)
-			checkTask.check = true
-			checkTask.description = 'Scanning license on Flex files'
-			checkTask.source = [ 'src/main/flex', 'src/test/flex' ]
-
-			// Add license checking into check lifecycle, since its a type of code quality plugin
-			project.tasks['compileFlex'].dependsOn checkTask
-			
-			// Add independent license task, which will perform format
-			License formatTask = project.tasks.create('licenseFormatFlex', License)
-			formatTask.check = false
-			formatTask.description = 'Scanning license on Flex files'
-			formatTask.source = [ 'src/main/flex', 'src/test/flex' ]
-        }		
-			
-        configureTaskRule()
-    }
-
-	protected void configureForSourceSet(SourceSet sourceSet, nl.javadude.gradle.plugins.license.License task) {
-		super.configureForSourceSet(sourceSet, task)
-		
-		// Override default allSource and apply only to all Java source files from SourceSet (excluding resources)
-		task.source = sourceSet.allJava
-	}	
-}
-
-// Common configuration for all subprojects
-// signing + maven deployment
-configure(subprojects.findAll { it.name != 'reference-docs' && !it.name.endsWith('-eclipse') && !it.name.endsWith('-tests') &&
-	!it.name.startsWith('granite-common') && it.name != 'granite-amf' && it.name != 'granite-jmf' }) { subproject ->
-	
-	apply plugin: 'maven'
-	apply plugin: 'signing'
-
-    group = 'org.graniteds'
-    version = granitedsVersion
-
-	configurations {
-		deployerJars
-	}
-	
-	dependencies {
-		deployerJars 'org.apache.maven.wagon:wagon-http:2.2'
-	}
-	
-	signing {
-		required { 
-			gradle.taskGraph.hasTask(':dist:uploadArchives') || gradle.taskGraph.hasTask(':dist:bintrayUpload')
-		}
-		sign configurations.archives
-	}
-
-    // Adds an install task for Flex projects because maven plugin does not add it for GradleFx projects
-    if (subproject.name.startsWith('granite-client-flex')) {
-        task install(type: Upload, dependsOn: 'build') {
-            configuration = subproject.configurations.archives
-            description = 'Installs the \'archives\' artifacts into the local Maven repository.'
-            repositories.mavenInstaller()
-        }
-    }
-
-    if (subproject.tasks.findByName('install') != null) {
-        install {
-            repositories {
-                mavenInstaller {
-                    // Generated dependencies are not suitable for maven pom, remove everything for now
-                    pom.whenConfigured { pom -> pom.dependencies.clear() }
-                }
-            }
-        }
-    }
-
-	uploadArchives {
-		repositories {
-			mavenDeployer {
-				beforeDeployment { 
-					MavenDeployment deployment -> signing.signPom(deployment)
-				}
-				
-				repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-					authentication(userName: sonatypeOssUserName, password: sonatypeOssPassword)
-				}
-				snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-					authentication(userName: sonatypeOssUserName, password: sonatypeOssPassword)
-				}
-				
-				pom.project {
-					name subproject.description
-					packaging 'swc'
-					description subproject.description
-					url 'http://www.graniteds.org'
-					
-					scm {
-						url 'scm:git@github.com:graniteds/graniteds.git'
-						connection 'scm:git@github.com:graniteds/graniteds.git'
-						developerConnection 'scm:git@github.com:graniteds/graniteds.git'
-					}
-					
-					licenses {
-							if (subproject.moduleLicense == 'lgpl') {
-								license {
-									name 'GNU LIBRARY GENERAL PUBLIC LICENSE, Version 2.1, February 1999'
-									url 'http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt'
-									distribution 'repo'
-								}
-							}
-							if (subproject.moduleLicense == 'gpl') {
-								license {
-									name 'GNU General Public License, Version 3, 29 June 2007'
-									url 'http://www.gnu.org/licenses/gpl-3.0.en.html'
-									distribution 'repo'
-								}
-							}
-					}
-
-					developers {
-						developer {
-							id 'fwolff'
-							name 'Franck Wolff'
-						}
-						developer {
-							id 'wdrai'
-							name 'William Drai'
-						}
-					}
-				}
-
-                // Generated dependencies are not suitable for maven pom, remove everything for now
-                pom.whenConfigured { pom -> pom.dependencies.clear() }
-            }
-		}
-	}
-}
-
+// Minimal coreProjects and allProjects
 ext.coreProjects = [
-        ':granite-server-core',
-        ':granite-server-servlet3',
-        ':granite-server-tomcat6',
-        ':granite-server-tomcat7',
-        ':granite-server-jetty6',
-        ':granite-server-jetty8',
-        ':granite-server-jetty9',
-        ':granite-server-jboss',
-        ':granite-server-wildfly',
-        ':granite-server-glassfishv2',
-        ':granite-server-glassfishv3',
-        ':granite-server-weblogic',
-        ':granite-server-activemq'
+    ':granite-server-core',
+    ':granite-server-servlet3',
 ]
 
 ext.allProjects = coreProjects + [
-        ':granite-server-cdi',
-        ':granite-server-ejb',
-        ':granite-server-spring',
-        ':granite-server-spring2',
-        ':granite-server-seam',
-        ':granite-server-hibernate',
-        ':granite-server-hibernate4',
-        ':granite-server-datanucleus',
-        ':granite-server-eclipselink',
-        ':granite-server-openjpa',
-        ':granite-server-toplink',
-        ':granite-server-beanvalidation',
-        ':granite-server-appengine'
+    ':granite-common'
 ]

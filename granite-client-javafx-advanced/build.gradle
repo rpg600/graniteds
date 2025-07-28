@@ -1,6 +1,6 @@
 // JavaFX client library
 
-apply plugin: 'cobertura'
+// apply plugin: 'cobertura'
 
 dependencies {
 	
@@ -41,6 +41,3 @@ javadoc {
 	source = sourceSets.main.java		// Redefine here so filter is applied
 }
 
-license {
-	exclude 'org/granite/binding/**'
-}

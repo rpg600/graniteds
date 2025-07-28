@@ -45,7 +45,47 @@ import jakarta.servlet.descriptor.JspConfigDescriptor;
 public class MockServletContext implements ServletContext {
 
 	private Map<String, Object> atts = new HashMap<String, Object>();
-	
+
+  @Override
+  public ServletRegistration.Dynamic addJspFile(String servletName, String jspFilePath) {
+      return null; // mock implementation
+  }
+
+	@Override
+  public void setResponseCharacterEncoding(String encoding) {
+      // No-op for mock
+  }
+
+  @Override
+  public void setRequestCharacterEncoding(String encoding) {
+      // No-op for mock
+  }
+
+  @Override
+  public String getResponseCharacterEncoding() {
+      return "UTF-8"; // Or return null if appropriate for your test scenario
+  }
+
+  @Override
+  public String getRequestCharacterEncoding() {
+      return "UTF-8"; // Or null if you want it unset
+  }
+
+  @Override
+  public void setSessionTimeout(int sessionTimeout) {
+      // No-op for mock
+  }
+
+  @Override
+  public int getSessionTimeout() {
+      return 30;
+  }
+
+  @Override
+  public String getVirtualServerName() {
+      return "mockServer";
+  }
+
 	@Override
 	public Dynamic addFilter(String arg0, String arg1) {
 		return null;
@@ -82,21 +122,21 @@ public class MockServletContext implements ServletContext {
 	}
 
 	@Override
-	public javax.servlet.ServletRegistration.Dynamic addServlet(
+	public jakarta.servlet.ServletRegistration.Dynamic addServlet(
 			String arg0, String arg1) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public javax.servlet.ServletRegistration.Dynamic addServlet(
+	public jakarta.servlet.ServletRegistration.Dynamic addServlet(
 			String arg0, Servlet arg1) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public javax.servlet.ServletRegistration.Dynamic addServlet(
+	public jakarta.servlet.ServletRegistration.Dynamic addServlet(
 			String arg0, Class<? extends Servlet> arg1) {
 		// TODO Auto-generated method stub
 		return null;

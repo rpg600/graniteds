@@ -1,6 +1,6 @@
 // JavaFX client library
 
-apply plugin: 'cobertura'
+// apply plugin: 'cobertura'
 
 dependencies {
 	
